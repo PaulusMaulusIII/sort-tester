@@ -9,7 +9,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
 public class App extends Application {
-    private final int MAX_TEST_ARRAY_LENGTH = 32;
+    private final int MAX_TEST_ARRAY_LENGTH = 8192;
     private final int COMPARISON_COUNT = 1;
     private final int SWAP_COUNT = 2;
     private final String[] ALGORTIHM_NAMES = new String[] { "Bubblesort", "Selectionsort", "Insertionsort" };
