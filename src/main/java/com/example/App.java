@@ -7,11 +7,10 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class App extends Application {
-    private final int MAX_TEST_ARRAY_LENGTH = 8192;
+    private final int MAX_TEST_ARRAY_LENGTH = 16;
     private final int COMPARISON_COUNT = 1;
     private final int SWAP_COUNT = 2;
     private final String[] ALGORITHM_NAMES = new String[] { "Bubblesort", "Selectionsort", "Insertionsort" };
@@ -23,13 +22,11 @@ public class App extends Application {
         stage.setTitle("Sortieralgorithmus-Test");
 
         GridPane graphContainerPane = new GridPane();
-        graphContainerPane.setMaxHeight(400);
         GridPane graphContainerPane2 = new GridPane();
-        graphContainerPane2.setMaxHeight(400);
         FlowPane mainPane = new FlowPane(graphContainerPane, graphContainerPane2);
 
-        for (int j = 1; j < 3; j++) {
-            for (int i = 1; i < 4; i++) {
+        for (int j = 1; j < OPERATIONS.length + 1; j++) {
+            for (int i = 1; i < MODES.length + 1; i++) {
                 LineChart<Number, Number> lineChart = runTest(i, j);
                 lineChart.setTitle(MODES[i - 1] + " - " + OPERATIONS[j - 1]);
                 switch (j) {
@@ -61,17 +58,19 @@ public class App extends Application {
     private void resizeCharts(FlowPane mainPane, double width, double height) {
         GridPane pane1 = (GridPane) mainPane.getChildren().get(0);
         GridPane pane2 = (GridPane) mainPane.getChildren().get(1);
-        double chartWidth = width / 3;
-        double chartHeight = height / 2;
+        double chartWidth = width / 3.05;
+        double chartHeight = height / 2.1;
 
         GridPane[] panes = new GridPane[] { pane1, pane2 };
         for (GridPane pane : panes) {
             pane.setPrefWidth(width);
             pane.setPrefHeight(chartHeight);
             for (int i = 0; i < pane1.getChildren().size(); i++) {
-                LineChart<Number, Number> lineChart = (LineChart<Number, Number>) pane.getChildren().get(i);
-                lineChart.setPrefWidth(chartWidth);
-                lineChart.setPrefHeight(chartHeight);
+                if (pane.getChildren().get(i) instanceof LineChart) {
+                    LineChart<Number, Number> lineChart = (LineChart<Number, Number>) pane.getChildren().get(i);
+                    lineChart.setPrefWidth(chartWidth);
+                    lineChart.setPrefHeight(chartHeight);
+                }
             }
         }
     }

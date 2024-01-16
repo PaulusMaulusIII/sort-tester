@@ -148,11 +148,13 @@ public class SortTester {
                 vergleichen++;
             }
 
-            speichern = sort[min];
-            sort[min] = sort[links];
-            sort[links] = speichern;
-            tauschen++;
-            vergleichen++;
+            if (sort[min] != sort[links]) {
+                speichern = sort[min];
+                sort[min] = sort[links];
+                sort[links] = speichern;
+                tauschen++;
+                vergleichen++;
+            }
 
             links = links + 1;
         }
