@@ -15,7 +15,7 @@ public class App extends Application {
     private final int SWAP_COUNT = 2;
     private final String[] ALGORITHM_NAMES = new String[] { "Bubblesort", "Selectionsort", "Insertionsort",
             "Mergesort" };
-    private final String[] MODES = new String[] { "Zufall", "Worst-Case", "Best-Case" };
+    private final String[] MODES = new String[] { "Zufall", "Worst-Case", "Best-Case", "Teilsortiert" };
     private final String[] OPERATIONS = new String[] { "Vergleichsoperationen", "Tauschoperationen" };
 
     @Override

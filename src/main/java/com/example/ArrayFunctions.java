@@ -1,5 +1,6 @@
 package com.example;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public interface ArrayFunctions {
@@ -50,6 +51,35 @@ public interface ArrayFunctions {
         for (int i = 0; i < array.length; i++) {
             array[i] = i;
         }
+        return array;
+    }
+
+    public default int[] generatePartlySortedArray(int length) {
+        int[] array = generateRandomArray(length, length * 5);
+        int arrayFilled = 0;
+        while (arrayFilled < array.length) {
+            int right = (int) (Math.random() * (array.length / 5) + 1);
+            int[] subArray = new int[0];
+            if ((arrayFilled + right) > array.length) {
+                for (int i = arrayFilled; i < array.length; i++) {
+                    subArray = addIntToArray(subArray, array[i]);
+                }
+                Arrays.sort(subArray);
+                for (int i = arrayFilled; i < array.length; i++) {
+                    array[i] = subArray[i - arrayFilled];
+                }
+            } else {
+                for (int i = arrayFilled; i < right; i++) {
+                    subArray = addIntToArray(subArray, array[i]);
+                }
+                Arrays.sort(subArray);
+                for (int i = arrayFilled; i < right; i++) {
+                    array[i] = subArray[i - arrayFilled];
+                }
+            }
+            arrayFilled += right;
+        }
+
         return array;
     }
 

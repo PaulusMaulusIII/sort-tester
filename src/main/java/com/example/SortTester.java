@@ -37,6 +37,9 @@ public class SortTester implements ArrayFunctions {
                 case 3:
                     a = generateBestCaseArray(arrayLength);
                     break;
+                case 4:
+                    a = generatePartlySortedArray(arrayLength);
+                    break;
 
                 default:
                     a = generateRandomArray(arrayLength, arrayLength * 5);
@@ -85,7 +88,6 @@ public class SortTester implements ArrayFunctions {
             case 3:
                 message += "Insertionsort ";
                 break;
-
             case 4:
                 message += "Mergesort ";
                 break;
@@ -102,6 +104,9 @@ public class SortTester implements ArrayFunctions {
                 break;
             case 3:
                 message += "Best-Case ";
+                break;
+            case 4:
+                message += "Teilsortiert ";
                 break;
 
             default:
