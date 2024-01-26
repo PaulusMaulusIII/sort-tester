@@ -10,10 +10,11 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class App extends Application {
-    private final int MAX_TEST_ARRAY_LENGTH = 16;
+    private final int MAX_TEST_ARRAY_LENGTH = 8192; // 262143
     private final int COMPARISON_COUNT = 1;
     private final int SWAP_COUNT = 2;
-    private final String[] ALGORITHM_NAMES = new String[] { "Bubblesort", "Selectionsort", "Insertionsort" };
+    private final String[] ALGORITHM_NAMES = new String[] { "Bubblesort", "Selectionsort", "Insertionsort",
+            "Mergesort" };
     private final String[] MODES = new String[] { "Zufall", "Worst-Case", "Best-Case" };
     private final String[] OPERATIONS = new String[] { "Vergleichsoperationen", "Tauschoperationen" };
 
@@ -58,8 +59,8 @@ public class App extends Application {
     private void resizeCharts(FlowPane mainPane, double width, double height) {
         GridPane pane1 = (GridPane) mainPane.getChildren().get(0);
         GridPane pane2 = (GridPane) mainPane.getChildren().get(1);
-        double chartWidth = width / 3.05;
-        double chartHeight = height / 2.1;
+        double chartWidth = width / (MODES.length + 0.05);
+        double chartHeight = height / (OPERATIONS.length + 0.1);
 
         GridPane[] panes = new GridPane[] { pane1, pane2 };
         for (GridPane pane : panes) {

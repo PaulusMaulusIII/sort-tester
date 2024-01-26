@@ -1,10 +1,8 @@
 package com.example;
 
-import java.util.Arrays;
-import java.util.LinkedList;
 import javafx.scene.chart.XYChart;
 
-public class SortTester {
+public class SortTester implements ArrayFunctions {
 
     static int testArraySize;
     int[] a;
@@ -44,16 +42,19 @@ public class SortTester {
                     a = generateRandomArray(arrayLength, arrayLength * 5);
                     break;
             }
-            int[] results = new int[2];
+            long[] results = new long[2];
             switch (algorithm) {
                 case 1:
-                    results = bubbleTest(a);
+                    results = new BubbleSortTest(a).run();
                     break;
                 case 2:
-                    results = selectionTest(a);
+                    results = new SelectionSortTest(a).run();
                     break;
                 case 3:
-                    results = insertionTest(a);
+                    results = new InsertionSortTest(a).run();
+                    break;
+                case 4:
+                    results = new MergeSortTest(a).run();
                     break;
 
                 default:
@@ -64,7 +65,7 @@ public class SortTester {
 
             sendStatus(algorithm, mode, arrayLength, results);
 
-            int result = results[operation - 1];
+            long result = results[operation - 1];
             testResultSeries.getData().add(new XYChart.Data<>(arrayLength, result));
         }
         System.out.println();
@@ -72,7 +73,7 @@ public class SortTester {
         return testResultSeries;
     }
 
-    public void sendStatus(int algorithm, int mode, int arrayLength, int[] results) {
+    public void sendStatus(int algorithm, int mode, int arrayLength, long[] results) {
         String message = "      ";
         switch (algorithm) {
             case 1:
@@ -83,6 +84,10 @@ public class SortTester {
                 break;
             case 3:
                 message += "Insertionsort ";
+                break;
+
+            case 4:
+                message += "Mergesort ";
                 break;
 
             default:
@@ -103,123 +108,8 @@ public class SortTester {
                 break;
         }
         message += arrayLength + " : ";
-        message += Arrays.toString(results);
+        message += arrayToString(results);
         System.out.println(message);
     }
 
-    public int[] bubbleTest(int[] array) {
-        int[] sort = copyArray(array);
-        int n = sort.length;
-        int vergleiche = 0;
-        int tauschen = 0;
-        int speichern;
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - 1; j++) {
-                if (sort[j] > sort[j + 1]) {
-                    speichern = sort[j];
-                    sort[j] = sort[j + 1];
-                    sort[j + 1] = speichern;
-                    tauschen++;
-                }
-                vergleiche++;
-            }
-        }
-        return new int[] { vergleiche, tauschen };
-
-    }
-
-    public int[] selectionTest(int[] array) {
-        int[] sort = copyArray(array);
-
-        int n = sort.length;
-        int speichern;
-        int links = 0;
-        int min;
-        int vergleichen = 0;
-        int tauschen = 0;
-
-        while (links < n) {
-            min = links;
-
-            for (int i = links + 1; i < n; i++) {
-                if (sort[i] < sort[min]) {
-                    min = i;
-                }
-                vergleichen++;
-            }
-
-            if (sort[min] != sort[links]) {
-                speichern = sort[min];
-                sort[min] = sort[links];
-                sort[links] = speichern;
-                tauschen++;
-                vergleichen++;
-            }
-
-            links = links + 1;
-        }
-
-        return new int[] { vergleichen, tauschen };
-    }
-
-    public int[] insertionTest(int[] array) {
-        int[] sort = copyArray(array);
-        int n = sort.length;
-        int wert, j;
-        int vergleiche = 0;
-        int tauschen = 0;
-        for (int i = 1; i < n; i++) {
-            wert = sort[i];
-            j = i;
-            while (j > 0 && sort[j - 1] > wert) {
-                sort[j] = sort[j - 1];
-                j = j - 1;
-                vergleiche++;
-                tauschen++;
-            }
-            vergleiche++;
-            sort[j] = wert;
-        }
-        return new int[] { vergleiche, tauschen };
-    }
-
-    public int[] generateRandomArray(int length, int max) {
-        LinkedList<Integer> used = new LinkedList<Integer>();
-        int[] array = new int[length];
-        for (int i = 0; i < array.length; i++) {
-            int randomInt = (int) (Math.random() * max);
-            while (used.contains(randomInt)) {
-                randomInt = (int) (Math.random() * max);
-            }
-            used.add(randomInt);
-            array[i] = randomInt;
-        }
-        return array;
-    }
-
-    public int[] generateWorstCaseArray(int length) {
-        int[] array = new int[length];
-        int j = array.length;
-        for (int i = 0; i < array.length; i++) {
-            j--;
-            array[i] = j;
-        }
-        return array;
-    }
-
-    public int[] generateBestCaseArray(int length) {
-        int[] array = new int[length];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = i;
-        }
-        return array;
-    }
-
-    public int[] copyArray(int[] array) {
-        int[] copy = new int[array.length];
-        for (int i = 0; i < copy.length; i++) {
-            copy[i] = array[i];
-        }
-        return copy;
-    }
 }
