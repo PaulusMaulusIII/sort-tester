@@ -59,6 +59,9 @@ public class SortTester implements ArrayFunctions {
                 case 4:
                     results = new MergeSortTest(a).run();
                     break;
+                case 5:
+                    results = new ShakerSortTest(a).run();
+                    break;
 
                 default:
                     System.err.println("Invalid Mode");
@@ -90,6 +93,9 @@ public class SortTester implements ArrayFunctions {
                 break;
             case 4:
                 message += "Mergesort ";
+                break;
+            case 5:
+                message += "Shakersort ";
                 break;
 
             default:

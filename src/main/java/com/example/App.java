@@ -10,13 +10,12 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class App extends Application {
-    private final int MAX_TEST_ARRAY_LENGTH = 8192; // 262143
-    private final int COMPARISON_COUNT = 1;
-    private final int SWAP_COUNT = 2;
+    private final int MAX_TEST_ARRAY_LENGTH = 8192;
     private final String[] ALGORITHM_NAMES = new String[] { "Bubblesort", "Selectionsort", "Insertionsort",
-            "Mergesort" };
+            "Mergesort", "Shakersort" };
     private final String[] MODES = new String[] { "Zufall", "Worst-Case", "Best-Case", "Teilsortiert" };
     private final String[] OPERATIONS = new String[] { "Vergleichsoperationen", "Tauschoperationen" };
+    private final String[] OPERATION_COUNTS = new String[] { "Vergleiche", "Tausche" };
 
     @Override
     public void start(Stage stage) {
@@ -86,20 +85,7 @@ public class App extends Application {
         LineChart<Number, Number> resultsLineChart = new LineChart<>(xAxis, yAxis);
         for (int i = 1; i < ALGORITHM_NAMES.length + 1; i++) {
             XYChart.Series<Number, Number> resultSeries = sortTester.runTest(i, mode, MAX_TEST_ARRAY_LENGTH, count);
-
-            switch (count) {
-                case COMPARISON_COUNT:
-                    resultSeries.setName(ALGORITHM_NAMES[i - 1] + " - Vergleiche");
-                    break;
-
-                case SWAP_COUNT:
-                    resultSeries.setName(ALGORITHM_NAMES[i - 1] + " - Tausche");
-                    break;
-
-                default:
-                    break;
-            }
-
+            resultSeries.setName(ALGORITHM_NAMES[i - 1] + " - " + OPERATION_COUNTS[count - 1]);
             resultsLineChart.getData().add(resultSeries);
         }
 
