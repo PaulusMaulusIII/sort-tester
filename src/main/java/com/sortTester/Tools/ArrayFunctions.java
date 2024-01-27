@@ -5,6 +5,13 @@ import java.util.LinkedList;
 
 public interface ArrayFunctions {
 
+    /**
+     * Appends {@code int} to the end of {@code int[]}
+     * 
+     * @param array {@code int[]} Array to append to
+     * @param value {@code int} Value to be added
+     * @return Copy of input {@code int[]} with {@code int} added to the end of it
+     */
     public default int[] addIntToArray(int[] array, int value) {
         int[] modifiedArray = new int[array.length + 1];
         for (int i = 0; i < array.length; i++) {
@@ -14,6 +21,12 @@ public interface ArrayFunctions {
         return modifiedArray;
     }
 
+    /**
+     * Removes the first entry of {@code int[]}
+     * 
+     * @param array {@code int[]} to remove the value from
+     * @return Copy of input {@code int[]} without the first value
+     */
     public default int[] removeFirstItemOfArray(int[] array) {
         int[] modifiedArray = new int[array.length - 1];
         for (int i = 1; i < array.length; i++) {
@@ -22,13 +35,32 @@ public interface ArrayFunctions {
         return modifiedArray;
     }
 
-    public default int[] generateRandomArray(int length, int max) {
+    /**
+     * Generates random {@code int[]} using {@code Math.random()}
+     * 
+     * @param length {@code int}
+     * @param max    {@code int} maximum value generated
+     * 
+     *               <pre>
+     *               (int) (Math.random() * max)
+     *               </pre>
+     * 
+     *               <b> Important: </b>
+     *               When {@code strict}, {@code max} has to be at least
+     *               {@code length}
+     * 
+     * @param strict {@code boolean}, when {@code true} allows each value only once
+     * @return Randomly generated {@code int[]}
+     */
+    public default int[] generateRandomArray(int length, int max, boolean strict) {
         LinkedList<Integer> used = new LinkedList<Integer>();
         int[] array = new int[length];
         for (int i = 0; i < array.length; i++) {
             int randomInt = (int) (Math.random() * max);
-            while (used.contains(randomInt)) {
-                randomInt = (int) (Math.random() * max);
+            if (strict) {
+                while (used.contains(randomInt)) {
+                    randomInt = (int) (Math.random() * max);
+                }
             }
             used.add(randomInt);
             array[i] = randomInt;
@@ -55,7 +87,7 @@ public interface ArrayFunctions {
     }
 
     public default int[] generatePartlySortedArray(int length) {
-        int[] array = generateRandomArray(length, length * 5);
+        int[] array = generateRandomArray(length, length * 5, false);
         int arrayFilled = 0;
         while (arrayFilled < array.length) {
             int right = (int) (Math.random() * (array.length / 5) + 1);

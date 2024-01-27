@@ -36,7 +36,7 @@ public class SortTester implements ArrayFunctions {
             a = new int[arrayLength];
             switch (mode) {
                 case 1:
-                    a = generateRandomArray(arrayLength, arrayLength * 5);
+                    a = generateRandomArray(arrayLength, arrayLength * 5, false);
                     break;
                 case 2:
                     a = generateWorstCaseArray(arrayLength);
@@ -49,7 +49,7 @@ public class SortTester implements ArrayFunctions {
                     break;
 
                 default:
-                    a = generateRandomArray(arrayLength, arrayLength * 5);
+                    a = generateRandomArray(arrayLength, arrayLength * 5, false);
                     break;
             }
             long[] results = new long[2];
