@@ -1,4 +1,4 @@
-package com.example;
+package com.sortTester.Algorithms;
 
 public class SortTest {
     int[] array;

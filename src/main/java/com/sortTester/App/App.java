@@ -1,4 +1,4 @@
-package com.example;
+package com.sortTester.App;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

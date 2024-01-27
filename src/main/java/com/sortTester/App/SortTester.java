@@ -1,4 +1,11 @@
-package com.example;
+package com.sortTester.App;
+
+import com.sortTester.Tools.ArrayFunctions;
+import com.sortTester.Algorithms.BubbleSortTest;
+import com.sortTester.Algorithms.InsertionSortTest;
+import com.sortTester.Algorithms.MergeSortTest;
+import com.sortTester.Algorithms.SelectionSortTest;
+import com.sortTester.Algorithms.ShakerSortTest;
 
 import javafx.scene.chart.XYChart;
 

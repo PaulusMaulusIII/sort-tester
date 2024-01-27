@@ -1,4 +1,6 @@
-package com.example;
+package com.sortTester.Algorithms;
+
+import com.sortTester.Tools.ArrayFunctions;
 
 public class MergeSortTest extends SortTest implements ArrayFunctions {
     public MergeSortTest(int[] array) {
