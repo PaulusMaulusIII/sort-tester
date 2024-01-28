@@ -1,7 +1,5 @@
 package com.sortTester.Tools;
 
-import java.util.LinkedList;
-
 public class ResultTable {
 
     public String[] head;
@@ -12,7 +10,7 @@ public class ResultTable {
     }
 
     public ResultTable(String[] tableHead) {
-
+        setHead(tableHead);
     }
 
     public void setWidth(int width) {

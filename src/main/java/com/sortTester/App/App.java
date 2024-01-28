@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class App extends Application {
+
     private final int MAX_TEST_ARRAY_LENGTH = 8192;
     private final String[] ALGORITHM_NAMES = new String[] { "Bubblesort", "Selectionsort", "Insertionsort",
             "Mergesort", "Shakersort" };
