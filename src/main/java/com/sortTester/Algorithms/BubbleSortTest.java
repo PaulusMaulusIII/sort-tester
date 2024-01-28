@@ -1,8 +1,8 @@
 package com.sortTester.Algorithms;
 
-import com.sortTester.Tools.ArrayFunctions;
+import com.sortTester.Tools.ArrayTools;
 
-public class BubbleSortTest extends SortTest implements ArrayFunctions {
+public class BubbleSortTest extends SortTest implements ArrayTools {
 
     public BubbleSortTest(int[] array) {
         super(array);

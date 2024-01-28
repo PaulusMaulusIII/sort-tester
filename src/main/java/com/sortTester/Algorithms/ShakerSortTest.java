@@ -1,8 +1,8 @@
 package com.sortTester.Algorithms;
 
-import com.sortTester.Tools.ArrayFunctions;
+import com.sortTester.Tools.ArrayTools;
 
-public class ShakerSortTest extends SortTest implements ArrayFunctions {
+public class ShakerSortTest extends SortTest implements ArrayTools {
 
     public ShakerSortTest(int[] array) {
         super(array);

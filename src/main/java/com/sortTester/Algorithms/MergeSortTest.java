@@ -1,8 +1,8 @@
 package com.sortTester.Algorithms;
 
-import com.sortTester.Tools.ArrayFunctions;
+import com.sortTester.Tools.ArrayTools;
 
-public class MergeSortTest extends SortTest implements ArrayFunctions {
+public class MergeSortTest extends SortTest implements ArrayTools {
     public MergeSortTest(int[] array) {
         super(array);
     }

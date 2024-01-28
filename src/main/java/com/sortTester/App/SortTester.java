@@ -9,7 +9,7 @@ import java.io.IOException;
 import com.sortTester.Algorithms.*;
 import javafx.scene.chart.XYChart;
 
-public class SortTester implements ArrayFunctions {
+public class SortTester implements ArrayTools {
 
     static int testArraySize;
     int[] testArray;

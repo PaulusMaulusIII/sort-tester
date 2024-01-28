@@ -3,7 +3,7 @@ package com.sortTester.Tools;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public interface ArrayFunctions {
+public interface ArrayTools {
 
     /**
      * Appends {@code int} to the end of {@code int[]}

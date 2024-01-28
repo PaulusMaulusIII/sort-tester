@@ -1,8 +1,8 @@
 package com.sortTester.Algorithms;
 
-import com.sortTester.Tools.ArrayFunctions;
+import com.sortTester.Tools.ArrayTools;
 
-public class SelectionSortTest extends SortTest implements ArrayFunctions {
+public class SelectionSortTest extends SortTest implements ArrayTools {
     public SelectionSortTest(int[] array) {
         super(array);
     }
