@@ -68,6 +68,12 @@ public interface ArrayFunctions {
         return array;
     }
 
+    /**
+     * Generates worst-case {@code int[]}
+     * 
+     * @param length {@code int} length of the array generated
+     * @return Worst-case {@code int[]}
+     */
     public default int[] generateWorstCaseArray(int length) {
         int[] array = new int[length];
         int j = array.length;
@@ -78,6 +84,12 @@ public interface ArrayFunctions {
         return array;
     }
 
+    /**
+     * Generates best-case {@code int[]}
+     * 
+     * @param length {@code int} length of the array generated
+     * @return Best-case {@code int[]}
+     */
     public default int[] generateBestCaseArray(int length) {
         int[] array = new int[length];
         for (int i = 0; i < array.length; i++) {
@@ -86,6 +98,12 @@ public interface ArrayFunctions {
         return array;
     }
 
+    /**
+     * Generates partly-sorted {@code int[]}
+     * 
+     * @param length {@code int} length of the array generated
+     * @return Partly-sorted {@code int[]}
+     */
     public default int[] generatePartlySortedArray(int length) {
         int[] array = generateRandomArray(length, length * 5, false);
         int arrayFilled = 0;
@@ -115,6 +133,12 @@ public interface ArrayFunctions {
         return array;
     }
 
+    /**
+     * Copies an {@code int[]}
+     * 
+     * @param array {@code int[]} to be copied
+     * @return Copy of {@code int[]}
+     */
     public default int[] copyArray(int[] array) {
         int[] copy = new int[array.length];
         for (int i = 0; i < copy.length; i++) {
@@ -123,6 +147,12 @@ public interface ArrayFunctions {
         return copy;
     }
 
+    /**
+     * Converts an {@code int[]} to {@code String}
+     * 
+     * @param array {@code int[]} to be converted
+     * @return {@code int[]} as {@code String}
+     */
     public default String arrayToString(int[] array) {
         String returnString = "[";
         for (int i = 0; i < array.length - 1; i++) {
@@ -132,6 +162,12 @@ public interface ArrayFunctions {
         return returnString;
     }
 
+    /**
+     * Converts an {@code long[]} to {@code String}
+     * 
+     * @param array {@code long[]} to be converted
+     * @return {@code long[]} as {@code String}
+     */
     public default String arrayToString(long[] array) {
         String returnString = "[";
         for (int i = 0; i < array.length - 1; i++) {
