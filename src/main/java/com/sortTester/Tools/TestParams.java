@@ -10,6 +10,6 @@ public enum TestParams {
     WORST_CASE,
     BEST_CASE,
     PARTLY_SORTED,
-    COMPARISONS,
+    COMPS,
     SWAPS
 }

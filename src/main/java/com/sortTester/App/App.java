@@ -20,7 +20,7 @@ public class App extends Application implements ArrayTools {
             TestParams.INSERTIONSORT, TestParams.MERGESORT, TestParams.SHAKERSORT };
     private final TestParams[] MODES = new TestParams[] { TestParams.RANDOM, TestParams.WORST_CASE,
             TestParams.BEST_CASE, TestParams.PARTLY_SORTED };
-    private final TestParams[] OPERATIONS = new TestParams[] { TestParams.COMPARISONS, TestParams.SWAPS };
+    private final TestParams[] OPERATIONS = new TestParams[] { TestParams.COMPS, TestParams.SWAPS };
 
     private File targetDirectory;
 
@@ -40,7 +40,7 @@ public class App extends Application implements ArrayTools {
                 LineChart<Number, Number> lineChart = runTest(mode, operation);
                 lineChart.setTitle(mode + " - " + operation);
                 switch (operation) {
-                    case COMPARISONS:
+                    case COMPS:
                         graphContainerPane.add(lineChart, indexOf(MODES, mode), 0);
                         break;
 

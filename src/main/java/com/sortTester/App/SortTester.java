@@ -73,7 +73,7 @@ public class SortTester implements ArrayTools {
 
             long result = 0;
             switch (operation) {
-                case COMPARISONS:
+                case COMPS:
                     result = results[0];
                     break;
                 case SWAPS:
