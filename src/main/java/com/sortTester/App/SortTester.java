@@ -89,7 +89,7 @@ public class SortTester implements ArrayTools {
 
         try {
             FileWriter fileWriter = new FileWriter(new File(targetDirectoryPath + "/" + fileName));
-            fileWriter.write(new CSVParser().parse(testResultTable));
+            fileWriter.write(new HTMLParser().parse(testResultTable));
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,7 +116,7 @@ public class SortTester implements ArrayTools {
         System.out.println(message);
         resultTable.addRow(resultRow);
 
-        return message.split(":")[0].strip() + "_RESULTS.csv";
+        return message.split(":")[0].strip() + "_RESULTS.html";
     }
 
 }

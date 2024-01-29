@@ -4,7 +4,7 @@ public class HTMLParser {
 
     public String parse(ResultTable table) {
 
-        String html = "<table>\n    <tbody>\n       <tr>\n";
+        String html = "<!DOCTYPE html>\n<html>\n<body>\n<table>\n    <tbody>\n       <tr>\n";
 
         for (int i = 0; i < table.head.length - 1; i++) {
             html += "           <th>" + table.head[i] + "</th>\n";
@@ -25,7 +25,7 @@ public class HTMLParser {
                 + table.results[table.results.length - 1][table.results[table.results.length - 1].length - 1]
                 + "</td>\n       </tr>\n";
 
-        html += "    </tbody>\n</table>";
+        html += "    </tbody>\n</table>\"</body>\n</html>";
 
         return html;
     }
