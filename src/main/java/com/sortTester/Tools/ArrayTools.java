@@ -176,4 +176,22 @@ public interface ArrayTools {
         returnString += array[array.length - 1] + "]";
         return returnString;
     }
+
+    /**
+     * Performs a linear search to find the {@code int} index of a
+     * {@code TestParams} in a {@code TestParams[]}
+     * 
+     * @param params {@code TestParams[]} to search
+     * @param param  {@code TestParams} parameter to be found
+     * @return {@code int} index of the {@code TestParams} in the
+     *         {@code TestParams[]}
+     */
+    public default int indexOf(TestParams[] params, TestParams param) {
+        for (int i = 0; i < params.length; i++) {
+            if (params[i] == param) {
+                return i;
+            }
+        }
+        return params.length;
+    }
 }

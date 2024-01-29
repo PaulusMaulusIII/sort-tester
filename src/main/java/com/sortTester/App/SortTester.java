@@ -18,36 +18,26 @@ public class SortTester implements ArrayTools {
 
     }
 
-    public XYChart.Series<Number, Number> runTest(int algorithm, int mode, int maxArrayLength, int operation) {
+    public XYChart.Series<Number, Number> runTest(TestParams algorithm, TestParams mode, int maxArrayLength,
+            TestParams operation, String targetDirectoryPath) {
         String fileName = "";
         ResultTable testResultTable = new ResultTable(
                 new String[] { "Algorithmus", "Modus", "Array-Länge", "Vergleiche", "Tausche" });
         XYChart.Series<Number, Number> testResultSeries = new XYChart.Series<Number, Number>();
-        switch (operation) {
-            case 1:
-                System.out.println("Vergleichsoperationen:");
-                break;
-
-            case 2:
-                System.out.println("Tauschoperationen:");
-                break;
-
-            default:
-                break;
-        }
+        System.out.println(operation);
         for (int arrayLength = 2; arrayLength < maxArrayLength + 1; arrayLength = arrayLength * 2) {
             testArray = new int[arrayLength];
             switch (mode) {
-                case 1:
+                case RANDOM:
                     testArray = generateRandomArray(arrayLength, arrayLength * 5, false);
                     break;
-                case 2:
+                case WORST_CASE:
                     testArray = generateWorstCaseArray(arrayLength);
                     break;
-                case 3:
+                case BEST_CASE:
                     testArray = generateBestCaseArray(arrayLength);
                     break;
-                case 4:
+                case PARTLY_SORTED:
                     testArray = generatePartlySortedArray(arrayLength);
                     break;
 
@@ -57,19 +47,19 @@ public class SortTester implements ArrayTools {
             }
             long[] results = new long[2];
             switch (algorithm) {
-                case 1:
+                case BUBBLESORT:
                     results = new BubbleSortTest(testArray).run();
                     break;
-                case 2:
+                case SELECTIONSORT:
                     results = new SelectionSortTest(testArray).run();
                     break;
-                case 3:
+                case INSERTIONSORT:
                     results = new InsertionSortTest(testArray).run();
                     break;
-                case 4:
+                case MERGESORT:
                     results = new MergeSortTest(testArray).run();
                     break;
-                case 5:
+                case SHAKERSORT:
                     results = new ShakerSortTest(testArray).run();
                     break;
 
@@ -81,12 +71,24 @@ public class SortTester implements ArrayTools {
 
             fileName = sendStatus(algorithm, mode, arrayLength, results, testResultTable);
 
-            long result = results[operation - 1];
+            long result = 0;
+            switch (operation) {
+                case COMPARISONS:
+                    result = results[0];
+                    break;
+                case SWAPS:
+                    result = results[1];
+                    break;
+
+                default:
+                    break;
+            }
+
             testResultSeries.getData().add(new XYChart.Data<>(arrayLength, result));
         }
 
         try {
-            FileWriter fileWriter = new FileWriter(new File(fileName));
+            FileWriter fileWriter = new FileWriter(new File(targetDirectoryPath + "/" + fileName));
             fileWriter.write(new CSVParser().parse(testResultTable));
             fileWriter.close();
         } catch (IOException e) {
@@ -98,56 +100,15 @@ public class SortTester implements ArrayTools {
         return testResultSeries;
     }
 
-    public String sendStatus(int algorithm, int mode, int arrayLength, long[] results, ResultTable resultTable) {
+    public String sendStatus(TestParams algorithm, TestParams mode, int arrayLength, long[] results,
+            ResultTable resultTable) {
         String[] resultRow = new String[5];
         String message = "      ";
-        switch (algorithm) {
-            case 1:
-                message += "Bubblesort ";
-                resultRow[0] = "Bubblesort";
-                break;
-            case 2:
-                message += "Selectionsort ";
-                resultRow[0] = "Selectionsort";
-                break;
-            case 3:
-                message += "Insertionsort ";
-                resultRow[0] = "Insertionsort";
-                break;
-            case 4:
-                message += "Mergesort ";
-                resultRow[0] = "Mergesort";
-                break;
-            case 5:
-                message += "Shakersort ";
-                resultRow[0] = "Shakersort";
-                break;
-
-            default:
-                break;
-        }
-        switch (mode) {
-            case 1:
-                message += "Zufälliges Array ";
-                resultRow[1] = "Zufälliges Array";
-                break;
-            case 2:
-                message += "Worst-Case ";
-                resultRow[1] = "Worst-Case";
-                break;
-            case 3:
-                message += "Best-Case ";
-                resultRow[1] = "Best-Case";
-                break;
-            case 4:
-                message += "Teilsortiert ";
-                resultRow[1] = "Teilsortiert";
-                break;
-
-            default:
-                break;
-        }
-        message += arrayLength + " : ";
+        message += algorithm;
+        resultRow[0] = algorithm.toString();
+        message += mode;
+        resultRow[1] = mode.toString();
+        message += "_" + arrayLength + " : ";
         resultRow[2] = Integer.toString(arrayLength);
         message += arrayToString(results);
         resultRow[3] = Long.toString(results[0]);
@@ -155,7 +116,7 @@ public class SortTester implements ArrayTools {
         System.out.println(message);
         resultTable.addRow(resultRow);
 
-        return "results/" + resultRow[0] + "-" + resultRow[1] + " Ergebnisse.csv";
+        return message.split(":")[0].strip() + "_RESULTS.csv";
     }
 
 }

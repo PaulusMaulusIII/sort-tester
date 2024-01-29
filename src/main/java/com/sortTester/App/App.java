@@ -1,5 +1,7 @@
 package com.sortTester.App;
 
+import com.sortTester.Tools.*;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -7,35 +9,43 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import java.io.File;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-public class App extends Application {
+public class App extends Application implements ArrayTools {
 
     private final int MAX_TEST_ARRAY_LENGTH = 8192;
-    private final String[] ALGORITHM_NAMES = new String[] { "Bubblesort", "Selectionsort", "Insertionsort",
-            "Mergesort", "Shakersort" };
-    private final String[] MODES = new String[] { "Zufall", "Worst-Case", "Best-Case", "Teilsortiert" };
-    private final String[] OPERATIONS = new String[] { "Vergleichsoperationen", "Tauschoperationen" };
-    private final String[] OPERATION_COUNTS = new String[] { "Vergleiche", "Tausche" };
+    private final TestParams[] ALGORITHM_NAMES = new TestParams[] { TestParams.BUBBLESORT, TestParams.SELECTIONSORT,
+            TestParams.INSERTIONSORT, TestParams.MERGESORT, TestParams.SHAKERSORT };
+    private final TestParams[] MODES = new TestParams[] { TestParams.RANDOM, TestParams.WORST_CASE,
+            TestParams.BEST_CASE, TestParams.PARTLY_SORTED };
+    private final TestParams[] OPERATIONS = new TestParams[] { TestParams.COMPARISONS, TestParams.SWAPS };
+
+    private File targetDirectory;
 
     @Override
     public void start(Stage stage) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        targetDirectory = directoryChooser.showDialog(stage);
+
         stage.setTitle("Sortieralgorithmus-Test");
 
         GridPane graphContainerPane = new GridPane();
         GridPane graphContainerPane2 = new GridPane();
         FlowPane mainPane = new FlowPane(graphContainerPane, graphContainerPane2);
 
-        for (int j = 1; j < OPERATIONS.length + 1; j++) {
-            for (int i = 1; i < MODES.length + 1; i++) {
-                LineChart<Number, Number> lineChart = runTest(i, j);
-                lineChart.setTitle(MODES[i - 1] + " - " + OPERATIONS[j - 1]);
-                switch (j) {
-                    case 1:
-                        graphContainerPane.add(lineChart, i, 0);
+        for (TestParams operation : OPERATIONS) {
+            for (TestParams mode : MODES) {
+                LineChart<Number, Number> lineChart = runTest(mode, operation);
+                lineChart.setTitle(mode + " - " + operation);
+                switch (operation) {
+                    case COMPARISONS:
+                        graphContainerPane.add(lineChart, indexOf(MODES, mode), 0);
                         break;
-                    case 2:
-                        graphContainerPane2.add(lineChart, i, 0);
+
+                    case SWAPS:
+                        graphContainerPane2.add(lineChart, indexOf(MODES, mode), 0);
                         break;
 
                     default:
@@ -76,7 +86,7 @@ public class App extends Application {
         }
     }
 
-    public LineChart<Number, Number> runTest(int mode, int count) {
+    public LineChart<Number, Number> runTest(TestParams mode, TestParams count) {
         SortTester sortTester = new SortTester();
 
         final NumberAxis xAxis = new NumberAxis();
@@ -84,12 +94,12 @@ public class App extends Application {
         xAxis.setLabel("Datensatzgröße");
         yAxis.setLabel("Zahl der Operationen");
         LineChart<Number, Number> resultsLineChart = new LineChart<>(xAxis, yAxis);
-        for (int i = 1; i < ALGORITHM_NAMES.length + 1; i++) {
-            XYChart.Series<Number, Number> resultSeries = sortTester.runTest(i, mode, MAX_TEST_ARRAY_LENGTH, count);
-            resultSeries.setName(ALGORITHM_NAMES[i - 1] + " - " + OPERATION_COUNTS[count - 1]);
+        for (TestParams algorithm : ALGORITHM_NAMES) {
+            XYChart.Series<Number, Number> resultSeries = sortTester.runTest(algorithm, mode, MAX_TEST_ARRAY_LENGTH,
+                    count, targetDirectory.getPath());
+            resultSeries.setName(algorithm + " - " + count);
             resultsLineChart.getData().add(resultSeries);
         }
-
         return resultsLineChart;
     }
 
