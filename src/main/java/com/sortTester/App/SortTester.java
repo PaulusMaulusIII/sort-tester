@@ -89,6 +89,7 @@ public class SortTester implements ArrayTools {
 
         try {
             FileWriter fileWriter = new FileWriter(new File(targetDirectoryPath + "/" + fileName));
+            System.out.println("Saved results as: " + targetDirectoryPath + "/" + fileName);
             fileWriter.write(new HTMLParser().parse(testResultTable));
             fileWriter.close();
         } catch (IOException e) {

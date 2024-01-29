@@ -95,8 +95,19 @@ public class App extends Application implements ArrayTools {
         yAxis.setLabel("Zahl der Operationen");
         LineChart<Number, Number> resultsLineChart = new LineChart<>(xAxis, yAxis);
         for (TestParams algorithm : ALGORITHM_NAMES) {
-            XYChart.Series<Number, Number> resultSeries = sortTester.runTest(algorithm, mode, MAX_TEST_ARRAY_LENGTH,
-                    count, targetDirectory.getPath());
+            XYChart.Series<Number, Number> resultSeries;
+            try {
+                resultSeries = sortTester.runTest(algorithm, mode, MAX_TEST_ARRAY_LENGTH,
+                        count, targetDirectory.getPath());
+            } catch (NullPointerException e) {
+                System.err.println("No path specified, saving to C:/SortTesterResults");
+                targetDirectory = new File("C:/SortTesterResults");
+                if (!targetDirectory.exists()) {
+                    targetDirectory.mkdir();
+                }
+                resultSeries = sortTester.runTest(algorithm, mode, MAX_TEST_ARRAY_LENGTH,
+                        count, targetDirectory.getPath());
+            }
             resultSeries.setName(algorithm + " - " + count);
             resultsLineChart.getData().add(resultSeries);
         }
