@@ -26,50 +26,9 @@ public class SortTester implements ArrayTools {
         XYChart.Series<Number, Number> testResultSeries = new XYChart.Series<Number, Number>();
         System.out.println(operation);
         for (int arrayLength = 2; arrayLength < maxArrayLength + 1; arrayLength = arrayLength * 2) {
-            testArray = new int[arrayLength];
-            switch (mode) {
-                case RANDOM:
-                    testArray = generateRandomArray(arrayLength, arrayLength * 5, false);
-                    break;
-                case WORST_CASE:
-                    testArray = generateWorstCaseArray(arrayLength);
-                    break;
-                case BEST_CASE:
-                    testArray = generateBestCaseArray(arrayLength);
-                    break;
-                case PARTLY_SORTED:
-                    testArray = generatePartlySortedArray(arrayLength);
-                    break;
-
-                default:
-                    testArray = generateRandomArray(arrayLength, arrayLength * 5, false);
-                    break;
-            }
-            long[] results = new long[2];
-            switch (algorithm) {
-                case BUBBLESORT:
-                    results = new BubbleSortTest(testArray).run();
-                    break;
-                case SELECTIONSORT:
-                    results = new SelectionSortTest(testArray).run();
-                    break;
-                case INSERTIONSORT:
-                    results = new InsertionSortTest(testArray).run();
-                    break;
-                case MERGESORT:
-                    results = new MergeSortTest(testArray).run();
-                    break;
-                case SHAKERSORT:
-                    results = new ShakerSortTest(testArray).run();
-                    break;
-
-                default:
-                    System.err.println("Invalid Mode");
-                    System.exit(1);
-                    break;
-            }
-
-            fileName = sendStatus(algorithm, mode, arrayLength, results, testResultTable);
+            testArray = generateArray(mode, arrayLength);
+            long[] results = getResults(algorithm);
+            fileName = getFileName(algorithm, mode, arrayLength, results, testResultTable);
 
             long result = 0;
             switch (operation) {
@@ -101,7 +60,57 @@ public class SortTester implements ArrayTools {
         return testResultSeries;
     }
 
-    public String sendStatus(TestParams algorithm, TestParams mode, int arrayLength, long[] results,
+    private long[] getResults(TestParams algorithm) {
+        long[] testResults = new long[2];
+        switch (algorithm) {
+            case BUBBLESORT:
+                testResults = new BubbleSortTest(testArray).run();
+                break;
+            case SELECTIONSORT:
+                testResults = new SelectionSortTest(testArray).run();
+                break;
+            case INSERTIONSORT:
+                testResults = new InsertionSortTest(testArray).run();
+                break;
+            case MERGESORT:
+                testResults = new MergeSortTest(testArray).run();
+                break;
+            case SHAKERSORT:
+                testResults = new ShakerSortTest(testArray).run();
+                break;
+
+            default:
+                System.err.println("Invalid Mode");
+                System.exit(1);
+                break;
+        }
+        return testResults;
+    }
+
+    private int[] generateArray(TestParams mode, int arrayLength) {
+        int[] array = new int[arrayLength];
+        switch (mode) {
+            case RANDOM:
+                testArray = generateRandomArray(arrayLength, arrayLength * 5, false);
+                break;
+            case WORST_CASE:
+                testArray = generateWorstCaseArray(arrayLength);
+                break;
+            case BEST_CASE:
+                testArray = generateBestCaseArray(arrayLength);
+                break;
+            case PARTLY_SORTED:
+                testArray = generatePartlySortedArray(arrayLength);
+                break;
+
+            default:
+                testArray = generateRandomArray(arrayLength, arrayLength * 5, false);
+                break;
+        }
+        return array;
+    }
+
+    public String getFileName(TestParams algorithm, TestParams mode, int arrayLength, long[] results,
             ResultTable resultTable) {
         String[] resultRow = new String[5];
         String message = "      ";
