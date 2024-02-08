@@ -186,7 +186,7 @@ public interface ArrayTools {
      * @return {@code int} index of the {@code TestParams} in the
      *         {@code TestParams[]}
      */
-    public default int indexOf(TestParams[] params, TestParams param) {
+    public default int indexOf(TestParameter[] params, TestParameter param) {
         for (int i = 0; i < params.length; i++) {
             if (params[i] == param) {
                 return i;

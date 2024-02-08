@@ -1,6 +1,4 @@
-package com.sortTester.App;
-
-import com.sortTester.Tools.*;
+package com.sortTester.Tools;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,13 +16,13 @@ public class SortTester implements ArrayTools {
 
     }
 
-    public XYChart.Series<Number, Number> runTest(TestParams algorithm, TestParams mode, int maxArrayLength,
-            TestParams operation, String targetDirectoryPath) {
+    public XYChart.Series<Number, Number> runTest(TestParameter algorithm, TestParameter mode, int maxArrayLength,
+            TestParameter operation, String targetDirectoryPath, boolean writeFile) {
         String fileName = "";
         ResultTable testResultTable = new ResultTable(
                 new String[] { "Algorithmus", "Modus", "Array-Länge", "Vergleiche", "Tausche" });
         XYChart.Series<Number, Number> testResultSeries = new XYChart.Series<Number, Number>();
-        System.out.println(operation);
+        System.out.println(operation.getDescriptor());
         for (int arrayLength = 2; arrayLength < maxArrayLength + 1; arrayLength = arrayLength * 2) {
             testArray = generateArray(mode, arrayLength);
             long[] results = getResults(algorithm);
@@ -46,13 +44,15 @@ public class SortTester implements ArrayTools {
             testResultSeries.getData().add(new XYChart.Data<>(arrayLength, result));
         }
 
-        try {
-            FileWriter fileWriter = new FileWriter(new File(targetDirectoryPath + "/" + fileName));
-            System.out.println("Saved results as: " + targetDirectoryPath + "/" + fileName);
-            fileWriter.write(new HTMLParser().parse(testResultTable));
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (writeFile) {
+            try {
+                FileWriter fileWriter = new FileWriter(new File(targetDirectoryPath + "/" + fileName));
+                System.out.println("Saved results as: " + targetDirectoryPath + "/" + fileName);
+                fileWriter.write(new HTMLParser().parse(testResultTable));
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         System.out.println();
@@ -60,7 +60,7 @@ public class SortTester implements ArrayTools {
         return testResultSeries;
     }
 
-    private long[] getResults(TestParams algorithm) {
+    private long[] getResults(TestParameter algorithm) {
         long[] testResults = new long[2];
         switch (algorithm) {
             case BUBBLESORT:
@@ -87,7 +87,7 @@ public class SortTester implements ArrayTools {
         return testResults;
     }
 
-    private int[] generateArray(TestParams mode, int arrayLength) {
+    private int[] generateArray(TestParameter mode, int arrayLength) {
         int[] array = new int[arrayLength];
         switch (mode) {
             case RANDOM:
@@ -110,13 +110,13 @@ public class SortTester implements ArrayTools {
         return array;
     }
 
-    public String getFileName(TestParams algorithm, TestParams mode, int arrayLength, long[] results,
+    public String getFileName(TestParameter algorithm, TestParameter mode, int arrayLength, long[] results,
             ResultTable resultTable) {
         String[] resultRow = new String[5];
         String message = "      ";
         message += algorithm;
         resultRow[0] = algorithm.toString();
-        message += mode;
+        message += "_" + mode;
         resultRow[1] = mode.toString();
         message += "_" + arrayLength + " : ";
         resultRow[2] = Integer.toString(arrayLength);

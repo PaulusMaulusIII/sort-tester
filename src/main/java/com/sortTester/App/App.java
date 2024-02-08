@@ -7,50 +7,163 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import java.io.File;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
-public class App extends Application implements ArrayTools {
+import java.io.File;
+import java.util.LinkedList;
+import java.util.concurrent.Callable;
+
+import javafx.stage.Stage;
+import javafx.util.Pair;
+
+public class App extends Application implements ArrayTools, FXTools {
 
     private final int MAX_TEST_ARRAY_LENGTH = 8192;
-    private final TestParams[] ALGORITHM_NAMES = new TestParams[] { TestParams.BUBBLESORT, TestParams.SELECTIONSORT,
-            TestParams.INSERTIONSORT, TestParams.MERGESORT, TestParams.SHAKERSORT };
-    private final TestParams[] MODES = new TestParams[] { TestParams.RANDOM, TestParams.WORST_CASE,
-            TestParams.BEST_CASE, TestParams.PARTLY_SORTED };
-    private final TestParams[] OPERATIONS = new TestParams[] { TestParams.COMPS, TestParams.SWAPS };
+    private final TestParameter[] ALGORITHMS = new TestParameter[] { TestParameter.BUBBLESORT,
+            TestParameter.SELECTIONSORT,
+            TestParameter.INSERTIONSORT, TestParameter.MERGESORT, TestParameter.SHAKERSORT };
+    private final TestParameter[] MODES = new TestParameter[] { TestParameter.RANDOM, TestParameter.WORST_CASE,
+            TestParameter.BEST_CASE, TestParameter.PARTLY_SORTED };
+    private final TestParameter[] OPERATIONS = new TestParameter[] { TestParameter.COMPS, TestParameter.SWAPS };
+
+    private LinkedList<TestParameter> algorithmList = new LinkedList<>();
+    private LinkedList<TestParameter> modeList = new LinkedList<>();
+    private LinkedList<TestParameter> operationList = new LinkedList<>();
 
     private File targetDirectory;
+    private boolean writeFile = false;
 
     @Override
     public void start(Stage stage) {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        targetDirectory = directoryChooser.showDialog(stage);
+        showInitialScene(stage);
+    }
 
-        stage.setTitle("Sortieralgorithmus-Test");
+    private void showInitialScene(Stage stage) {
+        stage.setTitle("Sortielalgorithmus-Test: Einstellungen");
 
-        GridPane graphContainerPane = new GridPane();
-        GridPane graphContainerPane2 = new GridPane();
-        FlowPane mainPane = new FlowPane(graphContainerPane, graphContainerPane2);
+        FlowPane mainPane = new FlowPane();
+        VBox mainContainer = new VBox(5);
+        HBox optionContainer = new HBox(5);
 
-        for (TestParams operation : OPERATIONS) {
-            for (TestParams mode : MODES) {
-                LineChart<Number, Number> lineChart = runTest(mode, operation);
-                lineChart.setTitle(mode + " - " + operation);
-                switch (operation) {
-                    case COMPS:
-                        graphContainerPane.add(lineChart, indexOf(MODES, mode), 0);
-                        break;
+        Label titleLabel = createLabel(40, 400, "Moinsen", ContentDisplay.CENTER);
 
-                    case SWAPS:
-                        graphContainerPane2.add(lineChart, indexOf(MODES, mode), 0);
-                        break;
+        optionContainer.getChildren().addAll(createAlgorithmSelection(), createModeSelection(),
+                createAdditionalOptions(stage));
+        mainContainer.getChildren().addAll(titleLabel, optionContainer);
 
-                    default:
-                        break;
+        mainPane.getChildren().addAll(mainContainer);
+
+        stage.setScene(new Scene(mainPane));
+        stage.show();
+    }
+
+    private VBox createAlgorithmSelection() {
+        LinkedList<Pair<String, Callable<Void>>> selectionList = new LinkedList<>();
+        for (TestParameter algorithm : ALGORITHMS) {
+            selectionList.add(new Pair<String, Callable<Void>>(algorithm.getDescriptor(), new Callable<Void>() {
+                @Override
+                public Void call() throws Exception {
+                    if (!modeList.contains(algorithm)) {
+                        algorithmList.add(algorithm);
+                    } else {
+                        algorithmList.remove(algorithm);
+                    }
+                    return null;
                 }
+            }));
+        }
+
+        return createSelection(400, 200, 5, "Algorithmen:", selectionList);
+    }
+
+    private VBox createModeSelection() {
+        LinkedList<Pair<String, Callable<Void>>> selectionList = new LinkedList<>();
+        for (TestParameter mode : MODES) {
+            selectionList.add(new Pair<String, Callable<Void>>(mode.getDescriptor(), new Callable<Void>() {
+                @Override
+                public Void call() throws Exception {
+                    if (!modeList.contains(mode)) {
+                        modeList.add(mode);
+                    } else {
+                        modeList.remove(mode);
+                    }
+                    return null;
+                }
+            }));
+        }
+
+        return createSelection(400, 200, 5, "Modi:", selectionList);
+    }
+
+    private VBox createAdditionalOptions(Stage stage) {
+        LinkedList<Pair<String, Callable<Void>>> selectionList = new LinkedList<>();
+
+        selectionList.add(new Pair<String, Callable<Void>>("Vergleiche", new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                if (!operationList.contains(OPERATIONS[0])) {
+                    operationList.add(OPERATIONS[0]);
+                } else {
+                    operationList.remove(OPERATIONS[0]);
+                }
+                return null;
+            }
+        }));
+
+        selectionList.add(new Pair<String, Callable<Void>>("Tausche", new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                if (!operationList.contains(OPERATIONS[1])) {
+                    operationList.add(OPERATIONS[1]);
+                } else {
+                    operationList.remove(OPERATIONS[1]);
+                }
+                return null;
+            }
+        }));
+
+        selectionList.add(new Pair<String, Callable<Void>>("Schließen", new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                stage.close();
+                return null;
+            }
+        }));
+
+        selectionList.add(new Pair<String, Callable<Void>>("Zielordner auswählen", new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                targetDirectory = showDirectoryChooser(stage);
+                return null;
+            }
+        }));
+
+        selectionList.add(new Pair<String, Callable<Void>>("Starten", new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                showResultScene(stage);
+                return null;
+            }
+        }));
+
+        return createSelection(400, 200, 5, "Zusätzliche Einstellungen", selectionList);
+    }
+
+    private void showResultScene(Stage stage) {
+        stage.setTitle("Sortieralgorithmus-Test: Ergebnisse");
+
+        FlowPane mainPane = new FlowPane();
+
+        for (TestParameter operation : operationList) {
+            for (TestParameter mode : modeList) {
+                mainPane.getChildren().add(createLineChart(mode, operation,
+                        mode.getDescriptor() + " - " + operation.getDescriptor()));
             }
         }
 
@@ -59,56 +172,42 @@ public class App extends Application implements ArrayTools {
         stage.setScene(scene);
 
         stage.widthProperty().addListener(
-                (obs, oldVal, newVal) -> resizeCharts(mainPane, stage.getWidth(), stage.getHeight()));
+                (obs, oldVal, newVal) -> resizeCharts(mainPane, stage.getWidth(), stage.getHeight(), modeList.size(),
+                        operationList.size()));
         stage.heightProperty().addListener(
-                (obs, oldVal, newVal) -> resizeCharts(mainPane, stage.getWidth(), stage.getHeight()));
+                (obs, oldVal, newVal) -> resizeCharts(mainPane, stage.getWidth(), stage.getHeight(), modeList.size(),
+                        operationList.size()));
 
+        resizeCharts(mainPane, stage.getWidth(), stage.getHeight(), modeList.size(),
+                operationList.size());
         stage.show();
     }
 
-    private void resizeCharts(FlowPane mainPane, double width, double height) {
-        GridPane pane1 = (GridPane) mainPane.getChildren().get(0);
-        GridPane pane2 = (GridPane) mainPane.getChildren().get(1);
-        double chartWidth = width / (MODES.length + 0.05);
-        double chartHeight = height / (OPERATIONS.length + 0.1);
+    private LineChart<Number, Number> createLineChart(TestParameter mode, TestParameter count, String title) {
+        final NumberAxis xAxis = createNumberAxis("Datensatzgröße");
+        final NumberAxis yAxis = createNumberAxis("Operationen");
 
-        GridPane[] panes = new GridPane[] { pane1, pane2 };
-        for (GridPane pane : panes) {
-            pane.setPrefWidth(width);
-            pane.setPrefHeight(chartHeight);
-            for (int i = 0; i < pane1.getChildren().size(); i++) {
-                if (pane.getChildren().get(i) instanceof LineChart) {
-                    LineChart<Number, Number> lineChart = (LineChart<Number, Number>) pane.getChildren().get(i);
-                    lineChart.setPrefWidth(chartWidth);
-                    lineChart.setPrefHeight(chartHeight);
-                }
-            }
-        }
+        LineChart<Number, Number> resultsLineChart = fillLineChart(xAxis, yAxis, mode, count);
+        resultsLineChart.setTitle(title);
+
+        return resultsLineChart;
     }
 
-    public LineChart<Number, Number> runTest(TestParams mode, TestParams count) {
+    private LineChart<Number, Number> fillLineChart(NumberAxis xAxis, NumberAxis yAxis, TestParameter mode,
+            TestParameter count) {
         SortTester sortTester = new SortTester();
-
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Datensatzgröße");
-        yAxis.setLabel("Zahl der Operationen");
         LineChart<Number, Number> resultsLineChart = new LineChart<>(xAxis, yAxis);
-        for (TestParams algorithm : ALGORITHM_NAMES) {
+        for (TestParameter algorithm : algorithmList) {
             XYChart.Series<Number, Number> resultSeries;
-            try {
-                resultSeries = sortTester.runTest(algorithm, mode, MAX_TEST_ARRAY_LENGTH,
-                        count, targetDirectory.getPath());
-            } catch (NullPointerException e) {
-                System.err.println("No path specified, saving to C:/SortTesterResults");
-                targetDirectory = new File("C:/SortTesterResults");
-                if (!targetDirectory.exists()) {
-                    targetDirectory.mkdir();
-                }
-                resultSeries = sortTester.runTest(algorithm, mode, MAX_TEST_ARRAY_LENGTH,
-                        count, targetDirectory.getPath());
+            String directoryPath = "";
+            if (targetDirectory != null) {
+                directoryPath = targetDirectory.getPath();
+                writeFile = true;
             }
-            resultSeries.setName(algorithm + " - " + count);
+
+            resultSeries = sortTester.runTest(algorithm, mode, MAX_TEST_ARRAY_LENGTH,
+                    count, directoryPath, writeFile);
+            resultSeries.setName(algorithm.getDescriptor() + " - " + count.getDescriptor());
             resultsLineChart.getData().add(resultSeries);
         }
         return resultsLineChart;
