@@ -56,20 +56,33 @@ public class App extends Application implements ArrayTools, FXTools {
         stage.show();
     }
 
+    public class ToggleButtonHandler implements Callable<Void> {
+
+        LinkedList<TestParameter> parameterList;
+        TestParameter parameter;
+
+        public ToggleButtonHandler(LinkedList<TestParameter> parameters, TestParameter parameter) {
+            this.parameter = parameter;
+            this.parameterList = parameters;
+        }
+
+        @Override
+        public Void call() throws Exception {
+            if (!parameterList.contains(parameter)) {
+                parameterList.add(parameter);
+            } else {
+                parameterList.remove(parameter);
+            }
+            return null;
+        }
+
+    }
+
     private VBox createAlgorithmSelection() {
         LinkedList<Pair<String, Callable<Void>>> selectionList = new LinkedList<>();
         for (TestParameter algorithm : ALGORITHMS) {
-            selectionList.add(new Pair<String, Callable<Void>>(algorithm.getDescriptor(), new Callable<Void>() {
-                @Override
-                public Void call() throws Exception {
-                    if (!modeList.contains(algorithm)) {
-                        algorithmList.add(algorithm);
-                    } else {
-                        algorithmList.remove(algorithm);
-                    }
-                    return null;
-                }
-            }));
+            selectionList.add(new Pair<String, Callable<Void>>(algorithm.getDescriptor(),
+                    new ToggleButtonHandler(algorithmList, algorithm)));
         }
 
         return createSelection(400, 200, 5, "Algorithmen:", selectionList);
@@ -78,17 +91,8 @@ public class App extends Application implements ArrayTools, FXTools {
     private VBox createModeSelection() {
         LinkedList<Pair<String, Callable<Void>>> selectionList = new LinkedList<>();
         for (TestParameter mode : MODES) {
-            selectionList.add(new Pair<String, Callable<Void>>(mode.getDescriptor(), new Callable<Void>() {
-                @Override
-                public Void call() throws Exception {
-                    if (!modeList.contains(mode)) {
-                        modeList.add(mode);
-                    } else {
-                        modeList.remove(mode);
-                    }
-                    return null;
-                }
-            }));
+            selectionList.add(
+                    new Pair<String, Callable<Void>>(mode.getDescriptor(), new ToggleButtonHandler(modeList, mode)));
         }
 
         return createSelection(400, 200, 5, "Modi:", selectionList);
@@ -97,29 +101,11 @@ public class App extends Application implements ArrayTools, FXTools {
     private VBox createAdditionalOptions(Stage stage) {
         LinkedList<Pair<String, Callable<Void>>> selectionList = new LinkedList<>();
 
-        selectionList.add(new Pair<String, Callable<Void>>("Vergleiche", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                if (!operationList.contains(OPERATIONS[0])) {
-                    operationList.add(OPERATIONS[0]);
-                } else {
-                    operationList.remove(OPERATIONS[0]);
-                }
-                return null;
-            }
-        }));
+        selectionList.add(
+                new Pair<String, Callable<Void>>("Vergleiche", new ToggleButtonHandler(operationList, OPERATIONS[0])));
 
-        selectionList.add(new Pair<String, Callable<Void>>("Tausche", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                if (!operationList.contains(OPERATIONS[1])) {
-                    operationList.add(OPERATIONS[1]);
-                } else {
-                    operationList.remove(OPERATIONS[1]);
-                }
-                return null;
-            }
-        }));
+        selectionList.add(
+                new Pair<String, Callable<Void>>("Tausche", new ToggleButtonHandler(operationList, OPERATIONS[1])));
 
         selectionList.add(new Pair<String, Callable<Void>>("Schließen", new Callable<Void>() {
             @Override
