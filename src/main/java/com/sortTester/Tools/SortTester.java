@@ -3,7 +3,6 @@ package com.sortTester.Tools;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import com.sortTester.Algorithms.*;
 import javafx.scene.chart.XYChart;
 

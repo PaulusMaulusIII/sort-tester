@@ -3,7 +3,6 @@ package com.sortTester.Tools;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
-
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;

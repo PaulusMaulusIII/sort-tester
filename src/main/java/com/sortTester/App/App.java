@@ -12,11 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
 import java.io.File;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
-
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
