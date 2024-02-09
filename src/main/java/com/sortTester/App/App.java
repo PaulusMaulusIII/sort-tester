@@ -23,12 +23,10 @@ import javafx.util.Pair;
 public class App extends Application implements ArrayTools, FXTools {
 
     private final int MAX_TEST_ARRAY_LENGTH = 8192;
-    private final TestParameter[] ALGORITHMS = new TestParameter[] { TestParameter.BUBBLESORT,
-            TestParameter.SELECTIONSORT,
-            TestParameter.INSERTIONSORT, TestParameter.MERGESORT, TestParameter.SHAKERSORT };
-    private final TestParameter[] MODES = new TestParameter[] { TestParameter.RANDOM, TestParameter.WORST_CASE,
-            TestParameter.BEST_CASE, TestParameter.PARTLY_SORTED };
-    private final TestParameter[] OPERATIONS = new TestParameter[] { TestParameter.COMPS, TestParameter.SWAPS };
+    private final TestParameter parameter;
+    private final TestParameter[] ALGORITHMS = parameter.getParamsOfGroup(TestParameter.ALGORITHMS);
+    private final TestParameter[] MODES = parameter.getParamsOfGroup(TestParameter.MODES);
+    private final TestParameter[] OPERATIONS = parameter.getParamsOfGroup(TestParameter.OPERATIONS);
 
     private LinkedList<TestParameter> algorithmList = new LinkedList<>();
     private LinkedList<TestParameter> modeList = new LinkedList<>();
