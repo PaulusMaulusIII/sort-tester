@@ -23,10 +23,9 @@ import javafx.util.Pair;
 public class App extends Application implements ArrayTools, FXTools {
 
     private final int MAX_TEST_ARRAY_LENGTH = 8192;
-    private final TestParameter parameter;
-    private final TestParameter[] ALGORITHMS = parameter.getParamsOfGroup(TestParameter.ALGORITHMS);
-    private final TestParameter[] MODES = parameter.getParamsOfGroup(TestParameter.MODES);
-    private final TestParameter[] OPERATIONS = parameter.getParamsOfGroup(TestParameter.OPERATIONS);
+    private final TestParameter[] ALGORITHMS = getParamsOfGroup(TestParameter.ALGORITHMS);
+    private final TestParameter[] MODES = getParamsOfGroup(TestParameter.MODES);
+    private final TestParameter[] OPERATIONS = getParamsOfGroup(TestParameter.OPERATIONS);
 
     private LinkedList<TestParameter> algorithmList = new LinkedList<>();
     private LinkedList<TestParameter> modeList = new LinkedList<>();
@@ -207,6 +206,29 @@ public class App extends Application implements ArrayTools, FXTools {
             resultsLineChart.getData().add(resultSeries);
         }
         return resultsLineChart;
+    }
+
+    private TestParameter[] getParamsOfGroup(TestParameter group) {
+        TestParameter[] foundParameters = new TestParameter[0];
+        for (TestParameter parameter : TestParameter.values()) {
+            try {
+                if (parameter.getGroup() == group) {
+                    addParameterToArray(foundParameters, parameter);
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+        }
+        return foundParameters;
+    }
+
+    private TestParameter[] addParameterToArray(TestParameter[] array, TestParameter parameter) {
+        TestParameter[] newArray = new TestParameter[array.length + 1];
+        for (int i = 0; i < array.length; i++) {
+            newArray[i] = array[i];
+        }
+        newArray[array.length] = parameter;
+        return newArray;
     }
 
     public static void main(String[] args) {

@@ -38,27 +38,4 @@ public enum TestParameter {
     public TestParameter getGroup() {
         return this.group;
     }
-
-    public TestParameter[] getParamsOfGroup(TestParameter group) {
-        TestParameter[] foundParameters = new TestParameter[0];
-        for (TestParameter parameter : TestParameter.values()) {
-            try {
-                if (parameter.getGroup() == group) {
-                    addParameterToArray(foundParameters, parameter);
-                }
-            } catch (Exception e) {
-                // TODO: handle exception
-            }
-        }
-        return foundParameters;
-    }
-
-    private TestParameter[] addParameterToArray(TestParameter[] array, TestParameter parameter) {
-        TestParameter[] newArray = new TestParameter[array.length + 1];
-        for (int i = 0; i < array.length; i++) {
-            newArray[i] = array[i];
-        }
-        newArray[array.length] = parameter;
-        return newArray;
-    }
 }
