@@ -3,6 +3,8 @@ package com.sortTester.App;
 import com.sortTester.Tools.*;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -13,7 +15,10 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -85,7 +90,7 @@ public class App extends Application implements ArrayTools, FXTools {
                     new ToggleButtonHandler(algorithmList, algorithm)));
         }
 
-        return createSelection(400, 200, 5, "Algorithmen:", selectionList);
+        return createSelection(400, 200, 5, "Algorithmen:", selectionList, true);
     }
 
     private VBox createModeSelection() {
@@ -95,7 +100,7 @@ public class App extends Application implements ArrayTools, FXTools {
                     new Pair<String, Callable<Void>>(mode.getDescriptor(), new ToggleButtonHandler(modeList, mode)));
         }
 
-        return createSelection(400, 200, 5, "Modi:", selectionList);
+        return createSelection(400, 200, 5, "Modi:", selectionList, true);
     }
 
     private VBox createAdditionalOptions(Stage stage) {
@@ -126,6 +131,9 @@ public class App extends Application implements ArrayTools, FXTools {
         selectionList.add(new Pair<String, Callable<Void>>("Starten", new Callable<Void>() {
             @Override
             public Void call() throws Exception {
+                if (operationList.isEmpty() || algorithmList.isEmpty() || modeList.isEmpty()) {
+                    return null;
+                }
                 showResultScene(stage);
                 return null;
             }
@@ -137,7 +145,37 @@ public class App extends Application implements ArrayTools, FXTools {
     private void showResultScene(Stage stage) {
         stage.setTitle("Sortieralgorithmus-Test: Ergebnisse");
 
-        FlowPane mainPane = new FlowPane();
+        FlowPane mainPane = new FlowPane() {
+            {
+                setAlignment(Pos.TOP_CENTER);
+            }
+
+            @Override
+            protected void layoutChildren() {
+                super.layoutChildren();
+
+                final LinkedHashMap<Double, List<Node>> rows = new LinkedHashMap<>();
+                getChildren().forEach(node -> {
+                    final double layoutY = node.getLayoutY();
+                    List<Node> row = rows.get(node.getLayoutY());
+                    if (row == null) {
+                        row = new ArrayList<>();
+                        rows.put(layoutY, row);
+                    }
+
+                    row.add(node);
+                });
+
+                final Object[] keys = rows.keySet().toArray();
+                final List<Node> firstRow = rows.get(keys[0]);
+                final List<Node> lastRow = rows.get(keys[keys.length - 1]);
+
+                for (int i = 0; i < lastRow.size(); i++) {
+                    lastRow.get(i).setLayoutX(firstRow.get(i).getLayoutX());
+                }
+            }
+        };
+        ;
 
         for (TestParameter operation : operationList) {
             for (TestParameter mode : modeList) {
@@ -200,7 +238,7 @@ public class App extends Application implements ArrayTools, FXTools {
                     foundParameters = addParameterToArray(foundParameters, parameter);
                 }
             } catch (Exception e) {
-                // TODO: handle exception
+                e.printStackTrace();
             }
         }
         return foundParameters;

@@ -23,6 +23,10 @@ public interface FXTools {
         double chartWidth = width / (horizontalChartAmount + 0.05);
         double chartHeight = height / (verticalChartAmount + 0.1);
 
+        if ((chartWidth / chartHeight) > (4 / 3)) {
+            chartWidth = (chartHeight / 3) * 4;
+        }
+
         pane.setPrefWidth(width);
         pane.setPrefHeight(height);
         for (int i = 0; i < pane.getChildren().size(); i++) {
@@ -66,10 +70,30 @@ public interface FXTools {
         button.setOnAction(
                 (event) -> {
                     try {
-                        if (button.getText().equals("[" + text + "]")) {
-                            button.setText(text);
-                        } else {
-                            button.setText("[" + text + "]");
+                        clickHandler.call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+
+        return button;
+    }
+
+    public default Button createButton(double height, double width, String text, Callable<Void> clickHandler,
+            boolean toggleButton) {
+        Button button = new Button();
+        button.setPrefHeight(height);
+        button.setPrefWidth(width);
+        button.setText(text);
+        button.setOnAction(
+                (event) -> {
+                    try {
+                        if (toggleButton) {
+                            if (button.getText().equals("[" + text + "]")) {
+                                button.setText(text);
+                            } else {
+                                button.setText("[" + text + "]");
+                            }
                         }
                         clickHandler.call();
                     } catch (Exception e) {
@@ -95,6 +119,18 @@ public interface FXTools {
 
         for (Pair<String, Callable<Void>> pair : selectionList) {
             buttons = addToButtonArray(buttons, createButton(10, 10, pair.getKey(), pair.getValue()));
+        }
+
+        return createButtonGroup(height, width, spacing, createLabel(10, 10, labelText, ContentDisplay.CENTER),
+                buttons);
+    }
+
+    public default VBox createSelection(double height, double width, int spacing, String labelText,
+            LinkedList<Pair<String, Callable<Void>>> selectionList, boolean toggleButtons) {
+        Button[] buttons = new Button[0];
+
+        for (Pair<String, Callable<Void>> pair : selectionList) {
+            buttons = addToButtonArray(buttons, createButton(10, 10, pair.getKey(), pair.getValue(), toggleButtons));
         }
 
         return createButtonGroup(height, width, spacing, createLabel(10, 10, labelText, ContentDisplay.CENTER),
