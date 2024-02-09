@@ -211,7 +211,7 @@ public class App extends Application implements ArrayTools, FXTools {
         for (TestParameter parameter : TestParameter.values()) {
             try {
                 if (parameter.getGroup() == group) {
-                    addParameterToArray(foundParameters, parameter);
+                    foundParameters = addParameterToArray(foundParameters, parameter);
                 }
             } catch (Exception e) {
                 // TODO: handle exception
