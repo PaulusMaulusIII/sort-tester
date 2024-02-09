@@ -112,10 +112,10 @@ public interface FXTools {
         for (Node item : buttonGroup.getChildren()) {
             if (item instanceof Button) {
                 ((Button) item).setPrefHeight(height / buttonGroup.getChildren().size());
-                ((Button) item).setPrefWidth(width);
+                ((Button) item).setPrefWidth(width - 0.5);
             } else if (item instanceof Label) {
                 ((Label) item).setPrefHeight(height / buttonGroup.getChildren().size());
-                ((Label) item).setPrefWidth(width);
+                ((Label) item).setPrefWidth(width - 0.5);
             }
         }
 
