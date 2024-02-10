@@ -63,12 +63,20 @@ public class App extends Application implements ArrayTools, FXTools {
 
     public class ToggleButtonHandler implements Callable<Void> {
 
+        String alternateText;
         LinkedList<TestParameter> parameterList;
         TestParameter parameter;
 
         public ToggleButtonHandler(LinkedList<TestParameter> parameters, TestParameter parameter) {
             this.parameter = parameter;
             this.parameterList = parameters;
+        }
+
+        public ToggleButtonHandler(LinkedList<TestParameter> parameters, TestParameter parameter,
+                String alternateText) {
+            this.parameter = parameter;
+            this.parameterList = parameters;
+            this.alternateText = alternateText;
         }
 
         @Override
@@ -81,6 +89,17 @@ public class App extends Application implements ArrayTools, FXTools {
             return null;
         }
 
+        public String getAlternateText() {
+            return alternateText;
+        }
+
+        public void setAlternateText(String alternateText) {
+            this.alternateText = alternateText;
+        }
+
+        public boolean hasAlternateText() {
+            return alternateText != null;
+        }
     }
 
     private VBox createAlgorithmSelection() {

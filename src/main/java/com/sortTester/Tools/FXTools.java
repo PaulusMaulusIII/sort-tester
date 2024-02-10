@@ -74,10 +74,16 @@ public interface FXTools {
                 (event) -> {
                     try {
                         if (clickHandler instanceof ToggleButtonHandler) {
-                            if (button.getText().equals("[" + text + "]")) {
-                                button.setText(text);
+                            if (((ToggleButtonHandler) clickHandler).hasAlternateText()) {
+                                String temp = button.getText();
+                                button.setText(((ToggleButtonHandler) clickHandler).getAlternateText());
+                                ((ToggleButtonHandler) clickHandler).setAlternateText(temp);
                             } else {
-                                button.setText("[" + text + "]");
+                                if (button.getText().equals("[" + text + "]")) {
+                                    button.setText(text);
+                                } else {
+                                    button.setText("[" + text + "]");
+                                }
                             }
                         }
                         clickHandler.call();
