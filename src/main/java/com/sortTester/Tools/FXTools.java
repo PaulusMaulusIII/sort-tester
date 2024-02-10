@@ -3,6 +3,9 @@ package com.sortTester.Tools;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
+
+import com.sortTester.App.App.ToggleButtonHandler;
+
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -70,25 +73,7 @@ public interface FXTools {
         button.setOnAction(
                 (event) -> {
                     try {
-                        clickHandler.call();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-
-        return button;
-    }
-
-    public default Button createButton(double height, double width, String text, Callable<Void> clickHandler,
-            boolean toggleButton) {
-        Button button = new Button();
-        button.setPrefHeight(height);
-        button.setPrefWidth(width);
-        button.setText(text);
-        button.setOnAction(
-                (event) -> {
-                    try {
-                        if (toggleButton) {
+                        if (clickHandler instanceof ToggleButtonHandler) {
                             if (button.getText().equals("[" + text + "]")) {
                                 button.setText(text);
                             } else {
@@ -119,18 +104,6 @@ public interface FXTools {
 
         for (Pair<String, Callable<Void>> pair : selectionList) {
             buttons = addToButtonArray(buttons, createButton(10, 10, pair.getKey(), pair.getValue()));
-        }
-
-        return createButtonGroup(height, width, spacing, createLabel(10, 10, labelText, ContentDisplay.CENTER),
-                buttons);
-    }
-
-    public default VBox createSelection(double height, double width, int spacing, String labelText,
-            LinkedList<Pair<String, Callable<Void>>> selectionList, boolean toggleButtons) {
-        Button[] buttons = new Button[0];
-
-        for (Pair<String, Callable<Void>> pair : selectionList) {
-            buttons = addToButtonArray(buttons, createButton(10, 10, pair.getKey(), pair.getValue(), toggleButtons));
         }
 
         return createButtonGroup(height, width, spacing, createLabel(10, 10, labelText, ContentDisplay.CENTER),

@@ -90,7 +90,7 @@ public class App extends Application implements ArrayTools, FXTools {
                     new ToggleButtonHandler(algorithmList, algorithm)));
         }
 
-        return createSelection(400, 200, 5, "Algorithmen:", selectionList, true);
+        return createSelection(400, 200, 5, "Algorithmen:", selectionList);
     }
 
     private VBox createModeSelection() {
@@ -100,7 +100,7 @@ public class App extends Application implements ArrayTools, FXTools {
                     new Pair<String, Callable<Void>>(mode.getDescriptor(), new ToggleButtonHandler(modeList, mode)));
         }
 
-        return createSelection(400, 200, 5, "Modi:", selectionList, true);
+        return createSelection(400, 200, 5, "Modi:", selectionList);
     }
 
     private VBox createAdditionalOptions(Stage stage) {
