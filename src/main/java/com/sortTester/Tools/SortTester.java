@@ -16,7 +16,7 @@ public class SortTester implements ArrayTools {
     }
 
     public XYChart.Series<Number, Number> runTest(TestParameter algorithm, TestParameter mode, int maxArrayLength,
-            TestParameter operation, String targetDirectoryPath, boolean writeFile) {
+            TestParameter operation, String targetDirectoryPath, boolean writeFile, String parser) {
         String fileName = "";
         ResultTable testResultTable = new ResultTable(
                 new String[] { "Algorithmus", "Modus", "Array-Länge", "Vergleiche", "Tausche" });
@@ -47,7 +47,19 @@ public class SortTester implements ArrayTools {
             try {
                 FileWriter fileWriter = new FileWriter(new File(targetDirectoryPath + "/" + fileName));
                 System.out.println("Saved results as: " + targetDirectoryPath + "/" + fileName);
-                fileWriter.write(new HTMLParser().parse(testResultTable));
+                switch (parser) {
+                    case "HTML":
+                        fileWriter.write(new HTMLParser().parse(testResultTable));
+                        break;
+
+                    case "CSV":
+                        fileWriter.write(new CSVParser().parse(testResultTable));
+                        break;
+
+                    default:
+                        System.err.println("Invalid Parser");
+                        break;
+                }
                 fileWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();

@@ -36,6 +36,7 @@ public class App extends Application implements ArrayTools, FXTools {
 
     private File targetDirectory;
     private boolean writeFile = false;
+    private String parser;
 
     @Override
     public void start(Stage stage) {
@@ -62,7 +63,7 @@ public class App extends Application implements ArrayTools, FXTools {
     }
 
     public class ToggleButtonHandler implements Callable<Void> {
-					
+
         String currentText;
         String alternateText;
         LinkedList<TestParameter> parameterList;
@@ -102,13 +103,17 @@ public class App extends Application implements ArrayTools, FXTools {
             return alternateText != null;
         }
 
-					public String getCurrentText(){
-							return currentText;
-					} 
+        public String getCurrentText() {
+            return currentText;
+        }
 
-					public void setCurrentText(String text) {
-							this.currentText = text;
-					}
+        public void setCurrentText(String text) {
+            this.currentText = text;
+        }
+
+        public boolean hasCurrentText() {
+            return currentText != null;
+        }
     }
 
     private VBox createAlgorithmSelection() {
@@ -152,6 +157,14 @@ public class App extends Application implements ArrayTools, FXTools {
             @Override
             public Void call() throws Exception {
                 targetDirectory = showDirectoryChooser(stage);
+                return null;
+            }
+        }));
+
+        selectionList.add(new Pair<String, Callable<Void>>("CSV", new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                
                 return null;
             }
         }));
@@ -251,7 +264,7 @@ public class App extends Application implements ArrayTools, FXTools {
             }
 
             resultSeries = sortTester.runTest(algorithm, mode, MAX_TEST_ARRAY_LENGTH,
-                    count, directoryPath, writeFile);
+                    count, directoryPath, writeFile, parser);
             resultSeries.setName(algorithm.getDescriptor() + " - " + count.getDescriptor());
             resultsLineChart.getData().add(resultSeries);
         }

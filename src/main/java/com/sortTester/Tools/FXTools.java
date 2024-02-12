@@ -70,6 +70,9 @@ public interface FXTools {
         button.setPrefHeight(height);
         button.setPrefWidth(width);
         button.setText(text);
+        if (clickHandler instanceof ToggleButtonHandler) {
+            ((ToggleButtonHandler) clickHandler).setCurrentText(text);
+        }
         button.setOnAction(
                 (event) -> {
                     try {
@@ -78,6 +81,7 @@ public interface FXTools {
                                 String temp = button.getText();
                                 button.setText(((ToggleButtonHandler) clickHandler).getAlternateText());
                                 ((ToggleButtonHandler) clickHandler).setAlternateText(temp);
+                                ((ToggleButtonHandler) clickHandler).setCurrentText(button.getText());
                             } else {
                                 if (button.getText().equals("[" + text + "]")) {
                                     button.setText(text);
