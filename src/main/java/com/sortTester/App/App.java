@@ -62,7 +62,8 @@ public class App extends Application implements ArrayTools, FXTools {
     }
 
     public class ToggleButtonHandler implements Callable<Void> {
-
+					
+        String currentText;
         String alternateText;
         LinkedList<TestParameter> parameterList;
         TestParameter parameter;
@@ -100,6 +101,14 @@ public class App extends Application implements ArrayTools, FXTools {
         public boolean hasAlternateText() {
             return alternateText != null;
         }
+
+					public String getCurrentText(){
+							return currentText;
+					} 
+
+					public void setCurrentText(String text) {
+							this.currentText = text;
+					}
     }
 
     private VBox createAlgorithmSelection() {
